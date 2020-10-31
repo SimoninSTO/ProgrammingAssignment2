@@ -1,4 +1,4 @@
-## invert the matrix
+## get a lists of 4 different functions
 
 makeCacheMatrix <- function(x = matrix()) {
     m<-NULL
@@ -7,7 +7,7 @@ makeCacheMatrix <- function(x = matrix()) {
       m <<- NULL
     }
     get <- function() x
-    setmatrix <- function(solve) m <<- solve
+    setmatrix <- function(x) m <<- solve(x)
     getmatrix <- function() m
     list(set = set, get = get,
          setmatrix = setmatrix,
@@ -15,16 +15,23 @@ makeCacheMatrix <- function(x = matrix()) {
     
 }
 
-## see if the inverted matrix has already been calculated
+## the resulting 4 different functions will be input into the following
+##functions, meaning z will be a list of 4 different functions, 
+##set function, get function, setmatrix function and getmatrix function
 
-cacheSolve <- function(x, ...) {
-        m<-x$getmatrix()
+cacheSolve <- function(z, ...) {
+        m<-z$getmatrix() ##extract getmatrix function from z, this line equals 
+                         ##m<-function() m, but by using the reference, one can
+                         ##get the the variables and values from the 
+                         ##makeCacheMatrix function above
         if(!is.null(m)){
           message("getting cached data")
           return(m)
         }
-        data<-x$get()
-        m<-solve(data,...)
-        x$setmatrix(m)
+        data<-z$get()##data here is the get function extracted from z
+                     ##namely, it equals to data<-function() x
+                     ##it retrives the x value from the makeCacheMatrix function
+        m<-solve(data)
+        
         m
 }
